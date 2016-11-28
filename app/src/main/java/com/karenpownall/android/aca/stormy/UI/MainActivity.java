@@ -1,6 +1,7 @@
 package com.karenpownall.android.aca.stormy.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,10 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.karenpownall.android.aca.stormy.R;
 import com.karenpownall.android.aca.stormy.model.Current;
 import com.karenpownall.android.aca.stormy.model.Day;
 import com.karenpownall.android.aca.stormy.model.Forecast;
-import com.karenpownall.android.aca.stormy.R;
 import com.karenpownall.android.aca.stormy.model.Hour;
 
 import org.json.JSONArray;
@@ -27,6 +28,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -256,5 +258,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @OnClick (R.id.dailyButton)
+    public void startDailyActivity(View view){
+        Intent intent = new Intent(this, DailyForecastActivity.class);
+        startActivity(intent);
+    }
 
 }
