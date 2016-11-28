@@ -1,4 +1,4 @@
-package com.karenpownall.android.aca.stormy;
+package com.karenpownall.android.aca.stormy.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -13,9 +13,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.karenpownall.android.aca.stormy.Model.Current;
-import com.karenpownall.android.aca.stormy.Model.Forecast;
+import com.karenpownall.android.aca.stormy.model.Current;
+import com.karenpownall.android.aca.stormy.model.Day;
+import com.karenpownall.android.aca.stormy.model.Forecast;
+import com.karenpownall.android.aca.stormy.R;
+import com.karenpownall.android.aca.stormy.model.Hour;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getForecast(double latitude, double longitude) {
         //Asynchronous Method
-        String apiKey = "1670d1693784e4e93048c158db152e45";
+        String apiKey = "aeffded538226bd5c0acb87a9437e82a";
         String forecastURL = "https://api.darksky.net/forecast/" + apiKey
                 + "/" + latitude + "," + longitude;
 
@@ -165,8 +169,53 @@ public class MainActivity extends AppCompatActivity {
     private Forecast parseForecastDetails(String jsonData) throws JSONException {
         Forecast forecast = new Forecast();
         forecast.setCurrent(getCurrentDetails(jsonData));
-
+        forecast.setHourlyForecast(getHourlyForecast(jsonData));
+        forecast.setDailyForecast(getDailyForecast(jsonData));
         return forecast;
+    }
+
+    private Day[] getDailyForecast(String jsonData) throws JSONException {
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+        JSONObject daily = forecast.getJSONObject("daily");
+        JSONArray data = daily.getJSONArray("data");
+
+        Day[] days = new Day[data.length()];
+        for (int i = 0; i < data.length(); i++){
+            JSONObject jsonDay = data.getJSONObject(i);
+            Day day = new Day();
+            day.setSummary(jsonDay.getString("summary"));
+            day.setIcon(jsonDay.getString("icon"));
+            day.setTemperatureMax(jsonDay.getDouble("temperatureMax"));
+            day.setTime(jsonDay.getLong("time"));
+            day.setTimezone(timezone);
+
+            days[i] = day;
+        }
+
+        return days;
+    }
+
+    private Hour[] getHourlyForecast(String jsonData) throws JSONException{
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+        JSONObject hourly = forecast.getJSONObject("hourly");
+        JSONArray data = hourly.getJSONArray("data");
+
+        Hour[] hours = new Hour[data.length()];
+        for (int i = 0; i < data.length(); i++){
+            JSONObject jsonHour = data.getJSONObject(i);
+            Hour hour = new Hour();
+            hour.setSummary(jsonHour.getString("summary"));
+            hour.setTemperature(jsonHour.getDouble("temperature"));
+            hour.setIcon(jsonHour.getString("icon"));
+            hour.setTime(jsonHour.getLong("time"));
+            hour.setTimezone(timezone);
+
+            hours[i] = hour;
+        }
+
+        return hours;
     }
 
     private Current getCurrentDetails(String jsonData) throws JSONException{

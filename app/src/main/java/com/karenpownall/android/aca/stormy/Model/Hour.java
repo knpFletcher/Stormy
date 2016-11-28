@@ -1,4 +1,4 @@
-package com.karenpownall.android.aca.stormy.Model;
+package com.karenpownall.android.aca.stormy.model;
 
 public class Hour {
 
