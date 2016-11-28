@@ -38,7 +38,9 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String DAILY_FORECAST = "Daily Forecast";
     private Forecast mForecast;
+
 
     @BindView(R.id.timeLabel) TextView mTimeLabel;
     @BindView(R.id.temperatureLabel) TextView mTemperatureLabel;
@@ -186,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < data.length(); i++){
             JSONObject jsonDay = data.getJSONObject(i);
             Day day = new Day();
+
             day.setSummary(jsonDay.getString("summary"));
             day.setIcon(jsonDay.getString("icon"));
             day.setTemperatureMax(jsonDay.getDouble("temperatureMax"));
@@ -261,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick (R.id.dailyButton)
     public void startDailyActivity(View view){
         Intent intent = new Intent(this, DailyForecastActivity.class);
+        intent.putExtra(DAILY_FORECAST, mForecast.getDailyForecast());
         startActivity(intent);
     }
 
