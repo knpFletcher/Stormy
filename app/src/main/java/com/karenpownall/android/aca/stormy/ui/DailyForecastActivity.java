@@ -33,7 +33,7 @@ public class DailyForecastActivity extends Activity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        Parcelable[] parcelables = intent.getParcelableArrayExtra(MainActivity.DAILY_FORECAST);
+        Parcelable[] parcelables = intent.getParcelableArrayExtra(com.karenpownall.android.aca.stormy.ui.MainActivity.DAILY_FORECAST);
         mDays = Arrays.copyOf(parcelables, parcelables.length, Day[].class); //an array of items from a parcelable extra intent
 
         DayAdapter adapter = new DayAdapter(this,mDays);
